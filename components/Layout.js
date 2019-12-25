@@ -1,5 +1,8 @@
 import Head from 'next/head';
 import { MyProvider } from '../utils/Context';
+import '../style/global.css';
+import '../style/admin.css';
+import '../style/index.css';
 
 const Layout = props => (
   <div>

@@ -1,6 +1,11 @@
 import React from 'react';
 
 const ImageDiv = props => {
+
+  const removeImage = () => {
+  
+  }
+
   // create element that maps all images from state
   const allImagesFromState = props.images.map((image, index) => (
     <div key={index} className='map-div'>
@@ -10,7 +15,7 @@ const ImageDiv = props => {
       <div className='remove-div'>
         <button
           className='remove-button'
-          onClick={() => this.removeImage(image.url, index)}>
+          onClick={() => removeImage(image.url, index)}>
           <i className='fas fa-times-circle'></i> Remove
         </button>
       </div>

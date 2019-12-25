@@ -1,11 +1,19 @@
-import React, { Component } from 'react';
+import React, { Component, Fragment } from 'react';
 import Layout from '../components/Layout';
 import { MyConsumer } from '../utils/Context';
+import { LazyLoadImage } from 'react-lazy-load-image-component';
+import 'react-lazy-load-image-component/src/effects/blur.css';
 import API from '../utils/API';
-import '../style/global.css';
-import '../style/index.css';
 
 class Home extends Component {
+  // // before page lods, grab the screen size
+  // static async getInitialProps(stuff) {
+  //   const isMobile = window.innerWidth<901 ? true : false
+  //   return {
+  //     mobile: isMobile
+  //   };
+  // }
+
   state = {
     galleryView: true,
     images: [],
@@ -19,6 +27,15 @@ class Home extends Component {
     window.addEventListener('resize', this.handleResize);
     window.addEventListener('keydown', this.handleKeyPress);
   }
+
+  // // handle window size
+  // handleInitialProps = async props => {
+  //   if (props.mobile) {
+  //     this.setState({ mobile: true });
+  //   } else {
+  //     this.setState({ mobile: false });
+  //   }
+  // };
 
   handleResize = () => {
     if (window.innerWidth < 901) {
@@ -42,11 +59,12 @@ class Home extends Component {
       .then(res => {
         console.log(res.data);
         let randomNums = [];
-        for (var i = 0; i < res.data._images.length; i++) {
+        let imageArr = res.data._images.reverse();
+        for (var i = 0; i < imageArr.length; i++) {
           randomNums[i] = Math.floor(Math.random() * 3);
         }
         this.setState({
-          images: [...res.data._images],
+          images: [...imageArr],
           randomNums: [...randomNums],
           picSize: [
             [1, 1],
@@ -57,6 +75,27 @@ class Home extends Component {
       })
       .catch(err => console.log(err));
   };
+
+  // getImages = () => {
+  //   API.getImages('lwatson14')
+  //     .then(res => {
+  //       console.log(res.data);
+  //       let randomNums = [];
+  //       for (var i = 0; i < res.data._images.length; i++) {
+  //         randomNums[i] = Math.floor(Math.random() * 3);
+  //       }
+  //       this.setState({
+  //         images: [...res.data._images],
+  //         randomNums: [...randomNums],
+  //         picSize: [
+  //           [1, 1],
+  //           [1, 2],
+  //           [2, 2]
+  //         ]
+  //       });
+  //     })
+  //     .catch(err => console.log(err));
+  // };
 
   showDisplayImage = index => {
     this.setState({ galleryView: false, displayImageIndex: index });
@@ -108,14 +147,14 @@ class Home extends Component {
                       Watson
                     </div>
                   )}
-                  <div className='info-text'>
+                  {/* <div className='info-text'>
                     <ul className='info-ul'>
                       <li className='info-li'>Modeling</li>
                       <li className='info-li'>Acting</li>
                       <li className='info-li'>Writing</li>
                       <li className='info-li'>Fitness</li>
                     </ul>
-                  </div>
+                  </div> */}
                   <div className='cta'>
                     {this.state.mobile ? (
                       <a
@@ -147,17 +186,17 @@ class Home extends Component {
                       <Fragment>
                         <div
                           className='left-arrow hover'
-                          onClick={() => leftArrowClick()}>
+                          onClick={() => this.leftArrowClick()}>
                           <i className='fas fa-angle-double-left'></i>
                         </div>
                         <div
                           className='right-arrow hover'
-                          onClick={() => rightArrowClick()}>
+                          onClick={() => this.rightArrowClick()}>
                           <i className='fas fa-angle-double-right'></i>
                         </div>
                         <div
                           className='show-all hover'
-                          onClick={() => showGalleryView()}>
+                          onClick={() => this.showGalleryView()}>
                           <i className='fas fa-th'></i>
                         </div>
                       </Fragment>
@@ -179,23 +218,42 @@ class Home extends Component {
                           grid-h={
                             this.state.picSize[this.state.randomNums[index]][1]
                           }>
-                          <img
+                          <LazyLoadImage
+                            className='gallery-page-image'
+                            placeholderSrc={image.low_res}
+                            src={image.url}
+                            effect='blur'
+                            delayTime='300'
+                            alt={`Lindsay: ${index + 1}`}
+                            onClick={() => this.showDisplayImage(index)}
+                          />
+                          {/* <img
                             className='gallery-page-image'
                             src={image.url}
                             alt={`Lindsay: ${index + 1}`}
-                            onClick={() => showDisplayImage(index)}
-                          />
+                            onClick={() => this.showDisplayImage(index)}
+                          /> */}
                         </div>
                       ))}
                     </div>
                   ) : (
                     <div className='inner-display-div'>
-                      <img
+                      <LazyLoadImage
                         className='display-image'
-                        src={images[displayImageIndex].url}
-                        alt={`Lindsay: ${displayImageIndex}`}
-                        onClick={() => showGalleryView()}
+                        src={
+                          this.state.images[this.state.displayImageIndex].url
+                        }
+                        alt={`Lindsay: ${this.state.displayImageIndex}`}
+                        onClick={() => this.showGalleryView()}
                       />
+                      {/* <img
+                        className='display-image'
+                        src={
+                          this.state.images[this.state.displayImageIndex].url
+                        }
+                        alt={`Lindsay: ${this.state.displayImageIndex}`}
+                        onClick={() => this.showGalleryView()}
+                      /> */}
                     </div>
                   )}
                 </div>

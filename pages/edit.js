@@ -2,10 +2,7 @@ import React, { Component } from 'react';
 import { MyConsumer } from '../utils/Context';
 import Router from 'next/router';
 import Layout from '../components/Layout';
-import ImageDiv from '../components/ImageDiv';
 import API from '../utils/API';
-import '../style/global.css';
-import '../style/admin.css';
 // import { inspect } from 'util';
 
 class Edit extends Component {
@@ -14,8 +11,8 @@ class Edit extends Component {
   static async getInitialProps(stuff) {
     const res = await API.getImages();
     return {
-      // pageLog: inspect(stuff, true, 0),
       images: res.data
+      // pageLog: inspect(stuff, true, 0),
     };
   }
 
@@ -26,8 +23,6 @@ class Edit extends Component {
     - setup the cloudinary widget
   */
   componentDidMount() {
-    // this.loginCheck();
-    // this.setCookie();
     this.getCookie();
     this.handleInitialProps(this.props);
     this.setState({
@@ -51,21 +46,21 @@ class Edit extends Component {
   // add images from initial props to state
   handleInitialProps = async props => {
     // console.log(props.images._images);
-    let imageArr = props.images._images;
+    let imageArr = props.images._images.reverse();
     if (imageArr) {
       await this.setState({
         images: [...imageArr]
       });
     }
     // await console.log(this.state.images[0].url);
-    await console.log(this.state.images);
+    // await console.log(this.state.images);
   };
 
   // GLOBAL STATE
   state = {
     images: [],
     isLoggedIn: false,
-    // username: '',
+    login: '',
     loginInvalid: false
   };
 
@@ -89,8 +84,8 @@ class Edit extends Component {
   uploadImage = async (resultEvent, widget) => {
     if (resultEvent.event === 'success') {
       let url = await resultEvent.info.secure_url;
-      await console.log(url);
-      await widget.close();
+      // await console.log(url);
+      // await widget.close();
       // this.addImage(url);
       await API.addImageToUser(url)
         .then(res => {
@@ -101,7 +96,7 @@ class Edit extends Component {
       await API.getImages()
         .then(async res => {
           console.log('📷 [getImages()] Returned data:', res);
-          let imageArr = res.data._images;
+          let imageArr = res.data._images.reverse();
           await this.setState({
             images: [...imageArr]
           });
@@ -123,9 +118,9 @@ class Edit extends Component {
     let cookieList = document.cookie.split(';');
     for (var i = 0; i < cookieList.length; i++) {
       let c = cookieList[i].trim();
-      console.log(c);
+      // console.log(c);
       if (c.indexOf('username') === 0) {
-        console.log(c.split('=')[1]);
+        // console.log(c.split('=')[1]);
         cookieUser = c.split('=')[1];
       }
     }
@@ -156,21 +151,29 @@ class Edit extends Component {
   // remove image from user
   // - remove from user db
   // - reload images on page
-  removeImage = (imageID, index) => {
-    console.log(`Remove ${imageID}, ${index}`);
-    // API.removeImage('5cc079b8e86e8d9769cfc66d', imageID).then(
-    //   console.log('done'),
-    //   this.removeImageFromState(index)
-    // );
+  removeImage = async imageId => {
+    var r = confirm('Are you sure you want to delete?');
+    if (r === true) {
+      // console.log(`🗑 [removeImage()] Returned image: `, image);
+      await API.removeImageFromUser(imageId)
+        .then(res => {
+          console.log('🗑 [removeImage()] Returned data:', res);
+        })
+        .catch(err => console.log(err));
+      // this.getImages();
+      await API.getImages()
+        .then(async res => {
+          console.log('📷 [getImages()] Returned data:', res);
+          let imageArr = res.data._images.reverse();
+          await this.setState({
+            images: [...imageArr]
+          });
+        })
+        .catch(err => console.log(err));
+      // DEBUG RACE CONDITIONS
+      await console.log('RELOAD');
+    }
   };
-
-  // removeImageFromState = imageIndex => {
-  //   let images = [...this.state.images];
-  //   images.splice(imageIndex, 1);
-  //   this.setState({
-  //     images: images
-  //   });
-  // };
 
   // reload images on page by making API call
   // and updating state
@@ -179,7 +182,7 @@ class Edit extends Component {
   //   API.getImages()
   //     .then(async res => {
   //       console.log('📷 [getImages()] Returned data:', res);
-  //       let imageArr = res.data._images;
+  //       let imageArr = res.data._images.reverse();
   //       await this.setState({
   //         images: [...imageArr]
   //       });
@@ -187,28 +190,22 @@ class Edit extends Component {
   //     .catch(err => console.log(err));
   // };
 
-  logout = async(e) => {
+  logout = async e => {
     e.preventDefault();
     await this.setState({ isLoggedIn: false });
     document.cookie = await 'username=;path=/edit;expires=-1';
     await Router.push('/');
-  }
+  };
 
   //  ------------------  HELPER FUNCTIONS ---
 
-  // addImage = async url => {
-  //   API.addImageToUser(url)
-  //     .then(res => {
-  //       console.log('🗄 [addImage()] Returned data:', res);
-  //     })
-  //     .catch(err => console.log(err));
-  // };
-
+  // creates a cookie and sets it to the browser
+  // path /edit, expires in 5 hours
   setCookie = value => {
     let d = new Date();
     d.setTime(d.getTime() + 5 * 60 * 60 * 1000);
     let expires = d.toUTCString();
-    document.cookie = 'username=lwatson14' + value + ';path=/edit;expires=' + expires;
+    document.cookie = 'username=lwatson14;path=/edit;expires=' + expires;
   };
 
   // deletes cookie from browser -> voids after session
@@ -219,9 +216,33 @@ class Edit extends Component {
     await Router.push('/');
   };
 
+  // addImage = async url => {
+  //   API.addImageToUser(url)
+  //     .then(res => {
+  //       console.log('🗄 [addImage()] Returned data:', res);
+  //     })
+  //     .catch(err => console.log(err));
+  // };
+
   //  ------------------  RENDER METHOD ---
 
   render() {
+    // create element that maps all images from state
+    const allImagesFromState = this.state.images.map((image, index) => (
+      <div key={index} className='map-div'>
+        <div className='image-div'>
+          <img className='edit-page-image' src={image.url} alt={image.url} />
+        </div>
+        <div className='remove-div'>
+          <button
+            className='remove-button'
+            onClick={() => this.removeImage(image.image_id)}>
+            <i className='fas fa-times-circle'></i> Remove
+          </button>
+        </div>
+      </div>
+    ));
+
     return (
       <Layout>
         <MyConsumer>
@@ -243,12 +264,20 @@ class Edit extends Component {
                     </button>
                     <button
                       className='button logout-button'
-                      onClick={(e) => this.logout(e)}>
+                      onClick={e => this.logout(e)}>
                       <i className='fas fa-door-open'></i> Logout
                     </button>
                   </div>
                   <div className='image-container'>
-                    <ImageDiv images={this.state.images} />
+                    {this.state.images.length > 0 ? (
+                      <div className='inner-image-div'>
+                        {allImagesFromState}
+                      </div>
+                    ) : (
+                      <div className='no-images'>
+                        No Images! <i className='fas fa-images'></i>
+                      </div>
+                    )}
                   </div>
                 </div>
               ) : (
