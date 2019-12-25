@@ -18,10 +18,10 @@ export default {
   getImages: async function() {
     try {
       const response = await axios.get(`${url}/users/findByUserName/lwatson14`);
-      await console.log('👍 [getImages] Returned data:', response);
+      // await console.log('👍 [getImages] Returned data:', response);
       return await response;
     } catch (e) {
-      console.log(`🛑 [getImages] Axios request failed: ${e}`);
+      // console.log(`🛑 [getImages] Axios request failed: ${e}`);
     }
   },
 
@@ -33,10 +33,10 @@ export default {
         `${url}/users/addImageToUser/lwatson14`,
         { url: imageUrl, image_id: create_UUID(), low_res: lowRes}
       );
-      await console.log('👍 [addImageToUser] Returned data:', response);
+      // await console.log('👍 [addImageToUser] Returned data:', response);
       return await response;
     } catch (e) {
-      console.log(`🛑 [addImageToUser] Axios request failed: ${e}`);
+      // console.log(`🛑 [addImageToUser] Axios request failed: ${e}`);
     }
   },
 
@@ -46,10 +46,10 @@ export default {
         `${url}/users/removeImageFromUser/lwatson14`,
         { image_id: imageId }
       );
-      await console.log('👍 [removeImageFromUser] Returned data:', response);
+      // await console.log('👍 [removeImageFromUser] Returned data:', response);
       return await response;
     } catch (e) {
-      console.log(`🛑 [removeImageFromUser] Axios request failed: ${e}`);
+      // console.log(`🛑 [removeImageFromUser] Axios request failed: ${e}`);
     }
   },
 };
