@@ -1,0 +1,258 @@
+/* ------------------- GALLERY PAGE ------------------- */
+.inner-gallery-div {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, 100px);
+  grid-auto-rows: 100px;
+  grid-auto-flow: dense;
+  grid-gap: 5px;
+  justify-content: center;
+}
+
+.gallery-map-div{
+  overflow: hidden;
+  align-items: center;
+}
+
+[grid-h='1'] {
+  grid-row: span 2;
+}
+
+[grid-h='2'] {
+  grid-row: span 4;
+}
+
+[grid-w='1'] {
+  grid-column: span 2;
+}
+
+[grid-w='2'] {
+  grid-column: span 4;
+}
+
+.gallery-page-image {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  object-position: top center;
+}
+
+
+/* ------------------- NAVBAR ------------------- */
+.nav-div {
+  display: grid;
+  width: 100%;
+  height: 95vh;
+  grid-template-rows: repeat(auto-fill, 140px);
+  align-items: center;
+  justify-content: center;
+  text-align: center;
+}
+
+.nav-div ul {
+  display: inline;
+}
+
+.nav-div li {
+  list-style-type: none;
+}
+
+.logo {
+  font-size: 3rem;
+  font-family: 'Raleway Dots', sans-serif;
+  /* font-weight: bold; */
+  text-transform: uppercase;
+}
+
+.info-li {
+  font-family: 'Montserrat', sans-serif;
+  font-style: italic;
+  font-size: 1.2rem;
+}
+
+.cta {
+  text-transform: uppercase;
+  font-size: 1.2rem;
+  letter-spacing: .35rem;
+  font-weight: 100;
+  font-family: 'Raleway', sans-serif;
+}
+
+.cta-link {
+  color: var(--black);
+  text-decoration: none;
+  border: 1px dotted var(--opaque);
+  border-radius: 50px;
+  padding: 18px 22px;
+}
+
+.cta-link:hover {
+  color: var(--red);
+  border: 1px solid var(--red);
+}
+
+.social-item {
+  font-size: 2.7rem;
+  margin: 10px 0;
+  color: var(--black);
+}
+
+.slideshow {
+  grid-row: -2;
+  display: grid;
+  grid-template-rows: 20px 20px;
+  grid-template-areas:
+   'L R'
+   'all all';
+   font-size: 1.5rem;
+}
+
+.left-arrow {
+  grid-area: L;
+  margin-right: 10px;
+}
+
+.right-arrow {
+  grid-area: R;
+  margin-left: 10px;
+}
+
+.show-all {
+  grid-area: all;
+  margin-top: 20px;
+}
+
+.hover:hover {
+  opacity: .6;
+  cursor: pointer;
+}
+
+
+/* ------------------- SINGLE IMAGE PAGE ------------------- */
+
+.inner-display-div {
+  grid-area: gallery;
+  display: grid;
+  width: 100%;
+  height: 90vh;
+  align-items: center;
+  justify-content: center;
+}
+
+.display-image {
+  width: 50vw;
+  max-width: 700px;
+}
+
+/* ------------------- HOME PAGE ------------------- */
+.home-container {
+  display: grid;
+  position: relative;
+  grid-template-columns: .3fr 1fr;
+  grid-template-areas:
+    'nav gallery';
+  padding: 20px;
+  height: 100vh;
+}
+
+.nav-container {
+  grid-area: nav;
+  display: grid;
+  position: fixed;
+  padding: 20px;
+  width: 22.5%;
+}
+
+.gallery-container {
+  grid-area: gallery;
+  padding-bottom: 20px;
+}
+
+.gallery-div {
+  grid-area: gallery;
+}
+
+/* -------------------   MEDIA QUERY   ------------------- */
+@media only screen and (max-width: 900px) {
+
+  /* HOME */
+  .home-container {
+    grid-template-columns: 1fr;
+    grid-template-rows: 10vh 1fr;
+    grid-template-areas: 
+      'nav'
+      'gallery'
+  }
+
+  /* NAV */
+  .nav-container {
+    position: fixed;
+    top: 0;
+    left: 0;
+    height: 15vh;
+    width: 100vw;
+    align-items: center;
+    background: var(--white);
+  }
+
+  .nav-div {
+    display: flex;
+    height: 5vh;
+    grid-template-columns: repeat(auto-fit, 30px);
+    grid-template-rows: 50px;
+    width: 100%;
+    align-items: center;
+    justify-content: space-evenly;
+  }
+
+  .slideshow {
+    display: none;
+  }
+
+  .info-text {
+    display: none;
+  }
+
+  .cta {
+    font-size: 2.7rem;
+  }
+  
+  .cta-link {
+    color: var(--black);
+    text-decoration: none;
+    border: none;
+  }
+
+  .cta-link:visited {
+    color: var(--black);
+    text-decoration: none;
+    border: none;
+  }
+
+  .cta-link:hover {
+    color: var(--black);
+    text-decoration: none;
+    border: none;
+  }
+
+  .hover:hover {
+    opacity: 1;
+    cursor: auto;
+  }
+
+  .hover:visited {
+    opacity: 1;
+    cursor: auto;
+  }
+
+  .display-image {
+    width: 80vw;
+  }
+
+}
+
+@media only screen and (max-width: 500px) {
+  /* GALLERY */
+  .inner-gallery-div {
+    grid-template-columns: 100px;
+  }
+}
