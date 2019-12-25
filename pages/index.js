@@ -57,7 +57,7 @@ class Home extends Component {
   getImages = () => {
     API.getImages('lwatson14')
       .then(res => {
-        console.log(res.data);
+        // console.log(res.data);
         let randomNums = [];
         let imageArr = res.data._images.reverse();
         for (var i = 0; i < imageArr.length; i++) {

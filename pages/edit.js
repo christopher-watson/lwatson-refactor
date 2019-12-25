@@ -89,13 +89,13 @@ class Edit extends Component {
       // this.addImage(url);
       await API.addImageToUser(url)
         .then(res => {
-          console.log('🗄 [addImage()] Returned data:', res);
+          // console.log('🗄 [addImage()] Returned data:', res);
         })
         .catch(err => console.log(err));
       // this.getImages();
       await API.getImages()
         .then(async res => {
-          console.log('📷 [getImages()] Returned data:', res);
+          // console.log('📷 [getImages()] Returned data:', res);
           let imageArr = res.data._images.reverse();
           await this.setState({
             images: [...imageArr]
@@ -103,7 +103,7 @@ class Edit extends Component {
         })
         .catch(err => console.log(err));
       // DEBUG RACE CONDITIONS
-      await console.log('RELOAD');
+      // await console.log('RELOAD');
     }
   };
 
@@ -157,13 +157,13 @@ class Edit extends Component {
       // console.log(`🗑 [removeImage()] Returned image: `, image);
       await API.removeImageFromUser(imageId)
         .then(res => {
-          console.log('🗑 [removeImage()] Returned data:', res);
+          // console.log('🗑 [removeImage()] Returned data:', res);
         })
         .catch(err => console.log(err));
       // this.getImages();
       await API.getImages()
         .then(async res => {
-          console.log('📷 [getImages()] Returned data:', res);
+          // console.log('📷 [getImages()] Returned data:', res);
           let imageArr = res.data._images.reverse();
           await this.setState({
             images: [...imageArr]
@@ -171,7 +171,7 @@ class Edit extends Component {
         })
         .catch(err => console.log(err));
       // DEBUG RACE CONDITIONS
-      await console.log('RELOAD');
+      // await console.log('RELOAD');
     }
   };
 
@@ -253,7 +253,7 @@ class Edit extends Component {
                   <div className='edit-button-div'>
                     <button
                       className='button home-button'
-                      onClick={() => Router.push('/')}>
+                      onClick={() => Router.push('/index')}>
                       <i className='fas fa-home'></i> Home
                     </button>
                     <button
@@ -285,7 +285,7 @@ class Edit extends Component {
                   <div className='inner-edit-button-div'>
                     <button
                       className='button home-button'
-                      onClick={() => Router.push('/')}>
+                      onClick={() => Router.push('/index')}>
                       <i className='fas fa-home'></i> Home
                     </button>
                   </div>
