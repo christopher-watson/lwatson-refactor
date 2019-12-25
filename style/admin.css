@@ -1,0 +1,155 @@
+/* ------------------- UPLOAD PAGE ------------------- */
+.button {
+  padding: .5rem 1rem ;
+  border-radius: 25px;
+  color: var(--white);
+  font-weight: 900;
+  margin: .5rem 0;
+  border-color: var(--black);
+  border-width: 2px;
+  font-size: 1.2rem;
+}
+
+.button:hover {
+  opacity: .8;
+  cursor: pointer;
+}
+
+.home-button {
+  background-color: #0082DF;
+}
+
+.upload-button {
+  background-color: #81C341;
+}
+
+.logout-button {
+  background-color: #6638F0;
+}
+
+form {
+  align-content: center;
+  margin-bottom: 2rem;
+  border: 2px solid #1A1A1A20;
+  border-radius: 25px;
+  padding: 1rem;
+  background-color: #5D5D5D90;
+  color: var(--white);
+  font-weight: 900;
+}
+
+.login-label {
+  font-size: 1.2rem;
+}
+
+.login-input {
+  height: 2rem;
+  border-radius: 25px;
+  border: 2px solid var(--opaque);
+  margin: 0 .5rem;
+  height: 2.5rem;
+  font-size: 1rem;
+  padding: 1rem;
+  width: 9rem;
+}
+
+.login-button {
+  border-radius: 25px;
+  color: #FF5721;
+  border-color: var(--black);
+  border-width: 2px;
+  font-size: 1.2rem;
+  margin: 0 .5rem;
+  padding: .25rem .5rem;
+  background-color: var(--white);
+}
+
+.login-button:hover {
+  opacity: .8;
+  cursor: pointer;
+}
+
+#login-error {
+  color: var(--red);
+  font-size: 1.2rem;
+  font-weight: 900;
+  height: 100%;
+  text-align: center;
+}
+
+.edit-container{ 
+  display: grid;
+  grid-template-rows: min-content 1fr;
+  grid-template-areas:
+    'top-row'
+    'images';
+  height: 100vh;
+}
+
+.edit-form-container {
+  display: flex;
+  width: 100vw;
+  flex-direction: column;
+  align-items: center;
+  margin-top: 41vh;
+}
+
+.edit-button-div {
+  grid-area: top-row;
+  display: flex;
+  justify-content: space-around;
+  margin: 1rem 0;
+}
+
+.inner-image-div {
+  grid-area: images;
+  display: grid;
+  grid-gap: 10px;
+  grid-template-columns: repeat(auto-fit, minmax(200px, 300px));
+  justify-content: center;
+  padding: 10px;
+}
+
+.map-div {
+  display: flex;
+  align-items: center;
+  flex-direction: column;
+}
+
+.image-div img {
+  width: 100%;
+  border: 3px solid var(--black);
+  border-radius: 25px;
+}
+
+.remove-button {
+  border-radius: 25px;
+  color: var(--white);
+  border-color: var(--black);
+  border-width: 2px;
+  font-size: 1rem;
+  margin: 0 .5rem;
+  font-weight: 900;
+  background-color: var(--red);
+  padding: .25rem .5rem;
+  width: 120px;
+}
+
+.remove-button:hover {
+  border-color: var(--white);
+  cursor: pointer;
+}
+
+.remove-div {
+  position: absolute;
+  margin-top: 365px;
+}
+
+.no-images {
+  display: flex;
+  width: 100vw;
+  flex-direction: column;
+  align-items: center;
+  margin-top: 41vh;
+  font-size: 4rem;
+}

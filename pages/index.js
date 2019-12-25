@@ -1,88 +1,269 @@
-import React from 'react'
-import Head from 'next/head'
-import Nav from '../components/nav'
+import React, { Component, Fragment } from 'react';
+import Layout from '../components/Layout';
+import { MyConsumer } from '../utils/Context';
+import { LazyLoadImage } from 'react-lazy-load-image-component';
+import 'react-lazy-load-image-component/src/effects/blur.css';
+import API from '../utils/API';
 
-const Home = () => (
-  <div>
-    <Head>
-      <title>Home</title>
-      <link rel="icon" href="/favicon.ico" />
-    </Head>
+class Home extends Component {
+  // // before page lods, grab the screen size
+  // static async getInitialProps(stuff) {
+  //   const isMobile = window.innerWidth<901 ? true : false
+  //   return {
+  //     mobile: isMobile
+  //   };
+  // }
 
-    <Nav />
+  state = {
+    galleryView: true,
+    images: [],
+    displayImageIndex: 0,
+    mobile: false
+  };
 
-    <div className="hero">
-      <h1 className="title">Welcome to Next.js!</h1>
-      <p className="description">
-        To get started, edit <code>pages/index.js</code> and save to reload.
-      </p>
+  componentDidMount() {
+    this.getImages();
+    this.handleResize();
+    window.addEventListener('resize', this.handleResize);
+    window.addEventListener('keydown', this.handleKeyPress);
+  }
 
-      <div className="row">
-        <a href="https://nextjs.org/docs" className="card">
-          <h3>Documentation &rarr;</h3>
-          <p>Learn more about Next.js in the documentation.</p>
-        </a>
-        <a href="https://nextjs.org/learn" className="card">
-          <h3>Next.js Learn &rarr;</h3>
-          <p>Learn about Next.js by following an interactive tutorial!</p>
-        </a>
-        <a
-          href="https://github.com/zeit/next.js/tree/master/examples"
-          className="card"
-        >
-          <h3>Examples &rarr;</h3>
-          <p>Find other example boilerplates on the Next.js GitHub.</p>
-        </a>
-      </div>
-    </div>
+  // // handle window size
+  // handleInitialProps = async props => {
+  //   if (props.mobile) {
+  //     this.setState({ mobile: true });
+  //   } else {
+  //     this.setState({ mobile: false });
+  //   }
+  // };
 
-    <style jsx>{`
-      .hero {
-        width: 100%;
-        color: #333;
-      }
-      .title {
-        margin: 0;
-        width: 100%;
-        padding-top: 80px;
-        line-height: 1.15;
-        font-size: 48px;
-      }
-      .title,
-      .description {
-        text-align: center;
-      }
-      .row {
-        max-width: 880px;
-        margin: 80px auto 40px;
-        display: flex;
-        flex-direction: row;
-        justify-content: space-around;
-      }
-      .card {
-        padding: 18px 18px 24px;
-        width: 220px;
-        text-align: left;
-        text-decoration: none;
-        color: #434343;
-        border: 1px solid #9b9b9b;
-      }
-      .card:hover {
-        border-color: #067df7;
-      }
-      .card h3 {
-        margin: 0;
-        color: #067df7;
-        font-size: 18px;
-      }
-      .card p {
-        margin: 0;
-        padding: 12px 0 0;
-        font-size: 13px;
-        color: #333;
-      }
-    `}</style>
-  </div>
-)
+  handleResize = () => {
+    if (window.innerWidth < 901) {
+      this.setState({ mobile: true });
+    } else {
+      this.setState({ mobile: false });
+    }
+  };
 
-export default Home
+  handleKeyPress = e => {
+    if (e.key === 'ArrowRight') {
+      this.rightArrowClick();
+    }
+    if (e.key === 'ArrowLeft') {
+      this.leftArrowClick();
+    }
+  };
+
+  getImages = () => {
+    API.getImages('lwatson14')
+      .then(res => {
+        console.log(res.data);
+        let randomNums = [];
+        let imageArr = res.data._images.reverse();
+        for (var i = 0; i < imageArr.length; i++) {
+          randomNums[i] = Math.floor(Math.random() * 3);
+        }
+        this.setState({
+          images: [...imageArr],
+          randomNums: [...randomNums],
+          picSize: [
+            [1, 1],
+            [1, 2],
+            [2, 2]
+          ]
+        });
+      })
+      .catch(err => console.log(err));
+  };
+
+  // getImages = () => {
+  //   API.getImages('lwatson14')
+  //     .then(res => {
+  //       console.log(res.data);
+  //       let randomNums = [];
+  //       for (var i = 0; i < res.data._images.length; i++) {
+  //         randomNums[i] = Math.floor(Math.random() * 3);
+  //       }
+  //       this.setState({
+  //         images: [...res.data._images],
+  //         randomNums: [...randomNums],
+  //         picSize: [
+  //           [1, 1],
+  //           [1, 2],
+  //           [2, 2]
+  //         ]
+  //       });
+  //     })
+  //     .catch(err => console.log(err));
+  // };
+
+  showDisplayImage = index => {
+    this.setState({ galleryView: false, displayImageIndex: index });
+  };
+
+  showGalleryView = () => {
+    if (!this.state.galleryView) {
+      this.setState({ galleryView: true });
+    }
+  };
+
+  leftArrowClick = () => {
+    const lastIndex = this.state.images.length - 1;
+    const currentImageIndex = this.state.displayImageIndex;
+    const shouldResetIndex = currentImageIndex === 0;
+    const index = shouldResetIndex ? lastIndex : currentImageIndex - 1;
+
+    this.setState({
+      displayImageIndex: index
+    });
+  };
+
+  rightArrowClick = () => {
+    const lastIndex = this.state.images.length - 1;
+    const currentImageIndex = this.state.displayImageIndex;
+    const shouldResetIndex = currentImageIndex === lastIndex;
+    const index = shouldResetIndex ? 0 : currentImageIndex + 1;
+
+    this.setState({
+      displayImageIndex: index
+    });
+  };
+
+  render() {
+    return (
+      <Layout>
+        <MyConsumer>
+          {({ state }) => (
+            <div>
+              <div className='home-container'>
+                {/*------------------------ NAVBAR ------------------------*/}
+                <div className='nav-div'>
+                  {this.state.mobile ? (
+                    <div className='logo'>LW</div>
+                  ) : (
+                    <div className='logo'>
+                      Lindsay
+                      <br />
+                      Watson
+                    </div>
+                  )}
+                  {/* <div className='info-text'>
+                    <ul className='info-ul'>
+                      <li className='info-li'>Modeling</li>
+                      <li className='info-li'>Acting</li>
+                      <li className='info-li'>Writing</li>
+                      <li className='info-li'>Fitness</li>
+                    </ul>
+                  </div> */}
+                  <div className='cta'>
+                    {this.state.mobile ? (
+                      <a
+                        className='cta-link'
+                        href='mailto:malerming@saltmat.com'>
+                        <i className='far fa-envelope'></i>
+                      </a>
+                    ) : (
+                      <a
+                        className='cta-link'
+                        href='mailto:malerming@saltmat.com'>
+                        Contact
+                      </a>
+                    )}
+                  </div>
+                  <div className='social'>
+                    <a
+                      className='social-item hover'
+                      href='https://www.instagram.com/lindsayawatson'
+                      target='_blank'
+                      rel='noopener noreferrer'>
+                      <i className='fab fa-instagram'></i>
+                    </a>
+                  </div>
+                  <div className='slideshow'>
+                    {this.state.galleryView ? (
+                      <div className='noSlideshow'></div>
+                    ) : (
+                      <Fragment>
+                        <div
+                          className='left-arrow hover'
+                          onClick={() => this.leftArrowClick()}>
+                          <i className='fas fa-angle-double-left'></i>
+                        </div>
+                        <div
+                          className='right-arrow hover'
+                          onClick={() => this.rightArrowClick()}>
+                          <i className='fas fa-angle-double-right'></i>
+                        </div>
+                        <div
+                          className='show-all hover'
+                          onClick={() => this.showGalleryView()}>
+                          <i className='fas fa-th'></i>
+                        </div>
+                      </Fragment>
+                    )}
+                  </div>
+                </div>
+
+                {/*------------------------ GALLERY ------------------------*/}
+                <div className='gallery-div'>
+                  {this.state.galleryView ? (
+                    <div className='inner-gallery-div'>
+                      {this.state.images.map((image, index) => (
+                        <div
+                          key={index}
+                          className='gallery-map-div hover'
+                          grid-w={
+                            this.state.picSize[this.state.randomNums[index]][0]
+                          }
+                          grid-h={
+                            this.state.picSize[this.state.randomNums[index]][1]
+                          }>
+                          <LazyLoadImage
+                            className='gallery-page-image'
+                            placeholderSrc={image.low_res}
+                            src={image.url}
+                            effect='blur'
+                            delayTime='300'
+                            alt={`Lindsay: ${index + 1}`}
+                            onClick={() => this.showDisplayImage(index)}
+                          />
+                          {/* <img
+                            className='gallery-page-image'
+                            src={image.url}
+                            alt={`Lindsay: ${index + 1}`}
+                            onClick={() => this.showDisplayImage(index)}
+                          /> */}
+                        </div>
+                      ))}
+                    </div>
+                  ) : (
+                    <div className='inner-display-div'>
+                      <LazyLoadImage
+                        className='display-image'
+                        src={
+                          this.state.images[this.state.displayImageIndex].url
+                        }
+                        alt={`Lindsay: ${this.state.displayImageIndex}`}
+                        onClick={() => this.showGalleryView()}
+                      />
+                      {/* <img
+                        className='display-image'
+                        src={
+                          this.state.images[this.state.displayImageIndex].url
+                        }
+                        alt={`Lindsay: ${this.state.displayImageIndex}`}
+                        onClick={() => this.showGalleryView()}
+                      /> */}
+                    </div>
+                  )}
+                </div>
+              </div>
+            </div>
+          )}
+        </MyConsumer>
+      </Layout>
+    );
+  }
+}
+
+export default Home;
