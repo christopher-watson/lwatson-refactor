@@ -42,7 +42,7 @@
   align-self: center;
 }
 
-.gallery-map-div{
+.gallery-map-div {
   overflow: hidden;
   align-items: center;
 }
@@ -80,11 +80,12 @@
 .nav-div {
   display: grid;
   position: fixed;
+  width: 25%;
   padding: 20px;
   height: 95vh;
   grid-template-rows: repeat(auto-fill, 140px);
   align-items: center;
-  /* justify-content: center; */
+  justify-content: center;
   text-align: center;
 }
 
@@ -141,9 +142,9 @@
   display: grid;
   grid-template-rows: 20px 20px;
   grid-template-areas:
-   'L R'
-   'all all';
-   font-size: 1.5rem;
+    'L R'
+    'all all';
+  font-size: 1.5rem;
 }
 
 .left-arrow {
@@ -190,7 +191,7 @@
   .home-container {
     grid-template-columns: 1fr;
     grid-template-rows: 10vh 1fr;
-    grid-template-areas: 
+    grid-template-areas:
       'nav'
       'gallery'
   }
@@ -208,9 +209,10 @@
 
   .nav-div {
     padding: 10px 30px 0 30px;
+    width: 100%;
     position: relative;
     display: grid;
-    grid-template-areas: 
+    grid-template-areas:
       'logo mail ig'
       'arrow arrow arrow';
     height: 15vh;
@@ -226,18 +228,18 @@
     grid-template-columns: repeat(3, 1fr);
     grid-template-rows: max-content;
     grid-template-areas:
-     'L all R';
+      'L all R';
     justify-content: space-around;
   }
 
   .left-arrow {
     margin-right: 0;
   }
-  
+
   .right-arrow {
     margin-left: 0;
   }
-  
+
   .show-all {
     margin-top: 0;
   }
@@ -249,7 +251,7 @@
   .cta {
     font-size: 2.7rem;
   }
-  
+
   .cta-link {
     color: var(--black);
     text-decoration: none;
@@ -290,8 +292,13 @@
 }
 
 @media only screen and (max-width: 500px) {
+
   /* GALLERY */
   .inner-gallery-div {
     grid-template-columns: 100px;
+  }
+
+  .nav-div {
+    width: 100%;
   }
 }
