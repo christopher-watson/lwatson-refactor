@@ -52,4 +52,17 @@ export default {
       // console.log(`🛑 [removeImageFromUser] Axios request failed: ${e}`);
     }
   },
+
+  insertImage: async function(imageUrl, lowRes, imagePos) {
+    try {
+      const response = await axios.post(
+        `${url}/users/addImageAtIndex/lwatson14?pos=${imagePos}`,
+        { url: imageUrl, image_id: create_UUID(), low_res: lowRes }
+      );
+      // await console.log('👍 [moveImage] Returned data:', response);
+      return await response;
+    } catch (e) {
+      // console.log(`🛑 [moveImage] Axios request failed: ${e}`);
+    }
+  },
 };

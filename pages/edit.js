@@ -175,6 +175,39 @@ class Edit extends Component {
     }
   };
 
+  moveImageToIndex = async image => {
+    // var image = this.state.images[fromIndex];
+    var r = prompt('Insert a number location for this image to be moved: ');
+    // console.log(r);
+    // console.log(image.url);
+    // console.log(image.image_id);
+    // console.log(image.low_res);
+    // console.log(isNaN(r));
+    if (!isNaN(r) && r < this.state.images.length) {
+      // console.log('MOVE');
+      // console.log(`➡️ [moveImage()] Returned image: `, image);
+      await API.insertImage(image.url, image.low_res, r)
+        .then(async res => {
+          // console.log(res);
+        })
+        .catch(err => console.log(err));
+      // this.getImages();
+      await API.getImages()
+        .then(async res => {
+          // console.log('📷 [getImages()] Returned data:', res);
+          let imageArr = res.data._images.reverse();
+          await this.setState({
+            images: [...imageArr]
+          });
+        })
+        .catch(err => console.log(err));
+      // DEBUG RACE CONDITIONS
+      // await console.log('RELOAD');
+    } else {
+      alert("Please choose a valid number")
+    }
+  };
+
   // reload images on page by making API call
   // and updating state
   // not sure if this is used???
@@ -228,10 +261,19 @@ class Edit extends Component {
 
   render() {
     // create element that maps all images from state
-    const allImagesFromState = this.state.images.map((image, index) => (
+    const allImages = this.state.images.reverse();
+    const allImagesFromState = allImages.map((image, index) => (
       <div key={index} className='map-div'>
         <div className='image-div'>
           <img className='edit-page-image' src={image.url} alt={image.url} />
+        </div>
+        <span className='image-num-span'>-- {index} --</span>
+        <div className='move-image-div'>
+          <button
+            className='move-image-button'
+            onClick={() => this.moveImageToIndex(image)}>
+            <i className='fas fa-arrows-alt'></i> Move Image
+          </button>
         </div>
         <div className='remove-div'>
           <button
