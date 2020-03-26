@@ -295,7 +295,7 @@ class Edit extends Component {
                   <div className='edit-button-div'>
                     <button
                       className='button home-button'
-                      onClick={() => Router.push('/index')}>
+                      onClick={() => Router.push('/')}>
                       <i className='fas fa-home'></i> Home
                     </button>
                     <button
@@ -327,7 +327,7 @@ class Edit extends Component {
                   <div className='inner-edit-button-div'>
                     <button
                       className='button home-button'
-                      onClick={() => Router.push('/index')}>
+                      onClick={() => Router.push('/')}>
                       <i className='fas fa-home'></i> Home
                     </button>
                   </div>
