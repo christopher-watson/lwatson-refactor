@@ -139,6 +139,7 @@ class Home extends Component {
     var audio = document.getElementById('audio');
     if (this.state.muted) {
       audio.muted = await false;
+      audio.currentTime = await 86;
     } else {
       audio.muted = await true;
     }
@@ -156,7 +157,7 @@ class Home extends Component {
               <div className='home-container'>
                 {/*------------------------ MUSIC ------------------------*/}
                 <div className='music-controls'>
-                  <ReactAudioPlayer id='audio' src={song} />
+                  <ReactAudioPlayer id='audio' src={song} loop />
                   {this.state.muted ? (
                     <div
                       className='mute-button'
