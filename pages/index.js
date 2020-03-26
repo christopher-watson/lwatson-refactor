@@ -3,6 +3,8 @@ import Layout from '../components/Layout';
 import { MyConsumer } from '../utils/Context';
 import { LazyLoadImage } from 'react-lazy-load-image-component';
 import 'react-lazy-load-image-component/src/effects/blur.css';
+import song from '../utils/music.mp3';
+import ReactAudioPlayer from 'react-audio-player';
 import API from '../utils/API';
 
 class Home extends Component {
@@ -18,7 +20,8 @@ class Home extends Component {
     galleryView: true,
     images: [],
     displayImageIndex: 0,
-    mobile: false
+    mobile: false,
+    muted: true
   };
 
   componentDidMount() {
@@ -26,6 +29,9 @@ class Home extends Component {
     this.handleResize();
     window.addEventListener('resize', this.handleResize);
     window.addEventListener('keydown', this.handleKeyPress);
+    var audio = document.getElementById('audio');
+    audio.muted = true;
+    audio.play();
   }
 
   // // handle window size
@@ -129,6 +135,18 @@ class Home extends Component {
     });
   };
 
+  toggleMute = async () => {
+    var audio = document.getElementById('audio');
+    if (this.state.muted) {
+      audio.muted = await false;
+    } else {
+      audio.muted = await true;
+    }
+    await this.setState({
+      muted: !this.state.muted
+    });
+  };
+
   render() {
     return (
       <Layout>
@@ -136,6 +154,23 @@ class Home extends Component {
           {({ state }) => (
             <div>
               <div className='home-container'>
+                {/*------------------------ MUSIC ------------------------*/}
+                <div className='music-controls'>
+                  <ReactAudioPlayer id='audio' src={song} />
+                  {this.state.muted ? (
+                    <div
+                      className='mute-button'
+                      onClick={() => this.toggleMute()}>
+                      <i className='fas fa-volume-up'></i>
+                    </div>
+                  ) : (
+                    <div
+                      className='mute-button mute'
+                      onClick={() => this.toggleMute()}>
+                      <i className='fas fa-volume-mute'></i>
+                    </div>
+                  )}
+                </div>
                 {/*------------------------ NAVBAR ------------------------*/}
                 <div className='nav-div'>
                   {this.state.mobile ? (

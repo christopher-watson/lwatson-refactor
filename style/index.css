@@ -1,12 +1,30 @@
+/* ------------------- MUSIC ------------------- */
+.music-controls {
+  position: fixed;
+  bottom: 40px;
+  right: 40px;
+  z-index: 100;
+}
+
+.mute-button {
+  cursor: pointer;
+}
+
+.mute-button i {
+  font-size: 30px;
+}
+
+.mute i {
+  opacity: .5;
+}
+
 /* ------------------- HOME PAGE ------------------- */
 .home-container {
   display: grid;
-  /* position: relative; */
   grid-template-columns: .3fr 1fr;
   grid-template-areas:
     'nav gallery';
   padding: 20px;
-  /* height: 100vh; */
 }
 
 .nav-div {
