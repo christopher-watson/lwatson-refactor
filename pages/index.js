@@ -139,7 +139,7 @@ class Home extends Component {
     var audio = document.getElementById('audio');
     if (this.state.muted) {
       audio.muted = await false;
-      audio.currentTime = await 86;
+      // audio.currentTime = await 86;
     } else {
       audio.muted = await true;
     }
